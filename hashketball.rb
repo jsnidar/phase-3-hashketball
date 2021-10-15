@@ -1,4 +1,6 @@
 # Write your code below game_hash
+require "pry"
+
 def game_hash
   {
     home: {
@@ -127,3 +129,75 @@ def game_hash
 end
 
 # Write code here
+def players
+  game_hash[:home][:players] + game_hash[:away][:players]
+end
+
+def teams
+  [game_hash[:home], game_hash[:away]]
+end
+
+def num_points_scored player_string
+  players.each do |player|
+    if player[:player_name] == player_string
+      return player[:points]
+    end
+  end
+end
+
+def shoe_size player_string
+  players = game_hash[:home][:players] + game_hash[:away][:players]
+  players.each do |player|
+    if player[:player_name] == player_string
+      return player[:shoe]
+    end
+  end
+end
+
+def team_colors team_name
+  teams.find { |team| team[:team_name] == team_name }[:colors]
+end
+
+def team_names
+  names = []
+  names.push(teams[0][:team_name])
+  names.push(teams[1][:team_name])
+  names
+end
+
+def player_numbers team_name
+  players = teams.find { |team| team[:team_name] == team_name }[:players]
+  players.map { |player| player[:number]}
+end
+
+def player_stats player_name
+  players.find { |player| player[:player_name] == player_name}
+end
+
+def big_shoe_rebounds
+  biggest_shoe = players.map { |player| player[:shoe]}.max
+  players.find { |player| player[:shoe] == biggest_shoe}[:rebounds]
+end
+
+def most_points_scored
+  most_points = players.map { |player| player[:points]}.max
+  players.find { |player| player[:points] == most_points}[:player_name]
+end
+
+def winning_team 
+  home_points = game_hash[:home][:players].map { |player| player[:points]}.sum
+  away_points = game_hash[:away][:players].map { |player| player[:points]}.sum
+  
+  if home_points > away_points then game_hash[:home][:team_name]
+  else game_hash[:away][:team_name]
+  end
+end
+
+def player_with_the_longest_name
+  longest_name_length = players.map { |player| player[:player_name].length}.max
+  players.find { |player| player[:player_name].length == longest_name_length}[:player_name]
+end
+
+binding.pry
+
+
